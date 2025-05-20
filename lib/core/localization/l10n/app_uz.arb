@@ -1,0 +1,57 @@
+{
+  "@@locale": "uz",
+  "getStarted": "Boshlaymiz",
+  "welcomeMessage": "Katlavan.uz ga xush kelibsiz",
+  "@welcomeMessage": {
+    "description": "Bosh sahifadagi salomlashish xabari."
+  },
+  "startJourney": "Qurilish ehtiyojlaringiz uchun mukammal ulgurji materiallarni topish uchun chuqur va boy tajribali sayohatni boshlang.",
+  "@startJourney": {
+    "description": "Ilovada taqdim etilayotgan tajribani tavsiflovchi qoshiq xabari."
+  },
+  "startFinding": "Ommaviy materiallarni topishni boshlang",
+  "@startFinding": {
+    "description": "Foydalanuvchilarni qurilish materiallarini qidirishni boshlashga undovchi matn."
+  },
+  "discoverSource": "Qurilish loyihalaringiz uchun to'g'ri ommaviy materiallarni osonlik bilan toping va sotib oling",
+  "@discoverSource": {
+    "description": "Ommaviy materiallarni topish va sotib olishning osonligini ta'kidlovchi matn."
+  },
+  "signUp": "Ro'yxatdan o'tish",
+  "@signUp": {
+    "description": "Foydalanuvchi ro'yxatdan o'tishi uchun tugma matni."
+  },
+  "login": "Kirish",
+  "@login": {
+    "description": "Foydalanuvchining tizimga kirishi uchun tugma matni."
+  },
+  "phoneNumber": "Telefon raqami",
+  "@phoneNumber": {
+    "description": "Telefon raqami kiritish maydoni uchun yozuv."
+  },
+  "haveAccount": "Allaqachon profilingiz bormi?",
+  "@haveAccount": {
+    "description": "Foydalanuvchidan profil mavjudligini so'raydigan savol."
+  },
+  "fullName": "Ismingiz",
+  "@fullName": {
+    "description": "Foydalanuvchi ismini kiritishi uchun maydon."
+  },
+  "enterCode": "Telefon raqamingizga yuborilgan kodni kiriting",
+  "@enterCode": {
+    "description": "Foydalanuvchiga yuborilgan tasdiqlash kodini kiritish bo'yicha ko'rsatma."
+  },
+  "enterSixDigitCode": "Telefon raqamingizga yuborilgan 6 xonali kodni kiriting",
+  "@enterSixDigitCode": {
+    "description": "Foydalanuvchi 6 xonali tasdiqlash kodini kiritishi kerakligini bildiruvchi matn."
+  },
+  "buyMaterials": "Material sotib olish",
+  "findTruck": "Yuk mashinasi",
+  "orders": "Buyurtmalar",
+  "noOrders": "Buyurtmalar yo'q",
+  "all": "Barchasi",
+  "active": "Faol",
+  "remainingTime": "Qolgan vaqt"
+
+
+}
