@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:katlavan24/core/constants/network_constants.dart';
 import 'package:katlavan24/core/models/token_model.dart';
@@ -21,7 +20,7 @@ final class AuthDataSourceImpl extends AuthDataSource {
   @override
   Future<void> getOtp(String number) async {
     try {
-      final response = await dio.postRequest(NetworkConstants.getOtp, data: {'phone_number': "+998"+number});
+      final response = await dio.postRequest(NetworkConstants.getOtp, data: {'phone_number': "+998$number"});
       if (response.statusCode! < 200 || response.statusCode! >= 300) {
         throw response;
       }
@@ -35,7 +34,7 @@ final class AuthDataSourceImpl extends AuthDataSource {
     try {
       final response = await dio.postRequest(
         NetworkConstants.verifyOtp,
-        data: {'phone_number': '+998'+number, 'otp_code': pin},
+        data: {'phone_number': '+998$number', 'otp_code': pin},
       );
       if (response.statusCode! < 200 || response.statusCode! >= 300) {
         throw response;

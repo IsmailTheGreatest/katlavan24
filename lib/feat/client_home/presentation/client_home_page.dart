@@ -4,8 +4,6 @@ import 'package:katlavan24/core/constants/app_assets.dart';
 import 'package:katlavan24/core/localization/cubit/localization_cubit.dart';
 import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/core/utils/format_uzbek_time.dart';
-import 'package:katlavan24/core/utils/navigation.dart';
-import 'package:katlavan24/feat/map/map_screen/map_screen.dart';
 import 'package:katlavan24/gen_l10n/app_localizations.dart';
 
 class ClientHomePage extends StatelessWidget {

@@ -7,7 +7,6 @@ import "package:katlavan24/core/splash/splash_screen.dart";
 import "package:katlavan24/core/styles/theme.dart";
 import "package:katlavan24/gen_l10n/app_localizations.dart";
 
-import "feat/auth/presentation/intro_page.dart";
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
