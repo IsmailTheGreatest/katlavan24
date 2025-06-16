@@ -1,13 +1,20 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/enums/status_enum.dart';
+import 'package:katlavan24/core/services/cache_service.dart';
+import 'package:katlavan24/feat/auth/data/auth_datasource.dart';
+import 'package:katlavan24/feat/auth/domain/auth_repo.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final controller = TextEditingController();
+  final repo = AuthRepositoryImpl(AuthDataSourceImpl());
 
   LoginCubit()
     : super(
@@ -54,28 +61,40 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void checkPinController(String text) {
-    if(text.length==6){
-
-    }
+    if (text.length == 6) {}
   }
 
   void sendPhone({required Function() onSuccess}) async {
     emit(state.copyWith(status: Status.loading));
-    await Future.delayed(Duration(seconds: 0));
-    onSuccess();
-    emit(state.copyWith(status: Status.init));
+    try {
+      await repo.getOtp(controller.text.replaceAll(RegExp(r'\D'), '').trim());
+      onSuccess();
+      emit(state.copyWith(status: Status.init));
+    } catch (e) {
+      emit(state.copyWith(status: Status.error));
+      emit(state.copyWith(status: Status.init));
+    }
   }
 
-  void login({required Function() onSuccess, required PinTheme pinTheme}) async {
+  void login({
+    required Function() onSuccess,
+    required PinTheme pinTheme,
+    required String code,
+    required Function(String message) onError,
+  }) async {
     try {
-      await Future.delayed(Duration(milliseconds: 400));
-
+      final token = await repo.verifyOtp(controller.text.replaceAll(RegExp(r'\D'), '').trim(), code.trim());
       emit(state.copyWith(pinTheme: pinTheme));
-
+      TokenService().setItem(token);
       await Future.delayed(Duration(seconds: 1));
       onSuccess();
     } catch (e) {
-      throw Exception(e);
+      if (e is Response) {
+        onError(r"Eskirgan yoki noto'g'ri kod");
+      } else {
+        onError(e.toString());
+      }
+      log(e.toString());
     }
   }
 }

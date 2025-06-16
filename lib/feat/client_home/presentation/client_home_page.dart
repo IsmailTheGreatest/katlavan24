@@ -35,7 +35,8 @@ class ClientHomePage extends StatelessWidget {
               iconStr: AppAssetsPng.search,
               imageStr: AppAssetsPng.bulk,
               onTap: () {
-                navigate(context,MapScreen());
+                context.read<LocalizationCubit>().changeLocale('uz', 'Cyrl');
+
               },
             ),
             SizedBox(height: 12),
