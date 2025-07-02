@@ -4,6 +4,8 @@ import 'package:katlavan24/core/constants/app_assets.dart';
 import 'package:katlavan24/core/localization/cubit/localization_cubit.dart';
 import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/core/utils/format_uzbek_time.dart';
+import 'package:katlavan24/core/utils/navigation.dart';
+import 'package:katlavan24/feat/map_test/map/map.dart';
 import 'package:katlavan24/gen_l10n/app_localizations.dart';
 
 class ClientHomePage extends StatelessWidget {
@@ -22,18 +24,18 @@ class ClientHomePage extends StatelessWidget {
             HomeButton(
               title: AppLocalizations.of(context)!.buyMaterials,
               iconStr: AppAssetsPng.shoppingCart,
-              imageStr: AppAssetsPng.truck,
+              imageStr: AppAssetsPng.bulk,
               onTap: () {
-                context.read<LocalizationCubit>().changeLocale('uz', 'Latn');
+                navigate(context, MapkitFlutterApp());
               },
             ),
             SizedBox(height: 12),
             HomeButton(
               title: AppLocalizations.of(context)!.findTruck,
               iconStr: AppAssetsPng.search,
-              imageStr: AppAssetsPng.bulk,
+              imageStr: AppAssetsPng.truck,
               onTap: () {
-                context.read<LocalizationCubit>().changeLocale('uz', 'Cyrl');
+                context.read<LocalizationCubit>().changeLocale('uz', 'Latn');
 
               },
             ),

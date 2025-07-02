@@ -6,15 +6,15 @@ import "package:katlavan24/core/localization/cubit/localization_cubit.dart";
 import "package:katlavan24/core/splash/splash_screen.dart";
 import "package:katlavan24/core/styles/theme.dart";
 import "package:katlavan24/gen_l10n/app_localizations.dart";
+import "package:yandex_maps_mapkit/init.dart" as init;
 
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  //  init.initMapkit(
-  //    locale: 'ru-RU',
-  //     apiKey: '99aac6a8-30e3-4247-9fd8-d4681e76db6a'
-  // );
+   init.initMapkit(
+      apiKey: '99aac6a8-30e3-4247-9fd8-d4681e76db6a'
+  );
 
 
   runApp(EntryPoint());
