@@ -40,7 +40,6 @@ class DioClient {
 
     try {
       if (await _isAuthenticated(token)) return AuthenticationStatus.authenticated;
-
       String? newAccessToken = await _getNewAccessToken(token.refreshToken);
       if (newAccessToken == null) {
         await TokenService().deleteItem();
@@ -71,13 +70,21 @@ class DioClient {
 
   Future<String?> _getNewAccessToken(String refreshToken) async {
     _dio.options.headers.remove('Authorization');
+print('here acees');
+try{
+  final response = await _sendRequest('POST', NetworkConstants.refreshToken, data: {'refresh': refreshToken});
+  Token? token = await TokenService().getItem();
+  if(response.statusCode!>=200&&response.statusCode!<300){
+  final newAccessToken = response.data['access'];
+  await TokenService().setItem(token!.copyWith(accessToken: newAccessToken));
 
-    final response = await _sendRequest('POST', NetworkConstants.refreshToken, data: {'refresh': refreshToken});
-    Token? token = await TokenService().getItem();
-    final newAccessToken = response.data['access'];
-    await TokenService().setItem(token!.copyWith(accessToken: newAccessToken));
+  return newAccessToken;}else {
+    return null ;
+  }
+}catch(e){
+  rethrow;
+}
 
-    return newAccessToken;
   }
 
   Function get getNewAccessToken => _getNewAccessToken;
@@ -191,12 +198,19 @@ class ApiInterceptors extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     if (response.statusCode == 401) {
+      print(response.realUri);
+      print('ahaah');
+      if(response.realUri.toString().contains('token/refresh/')){
+        await TokenService().deleteItem();
+        return;
+      }
       Token? token = await TokenService().getItem();
 
       String? newAccessToken = await DioClient().getNewAccessToken(token?.refreshToken);
       if (newAccessToken == null) {
         await TokenService().deleteItem();
       }
+
     }
 
     super.onResponse(response, handler);

@@ -34,6 +34,38 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+class PrimaryButtonAlt extends StatelessWidget {
+  const PrimaryButtonAlt(this.text, {super.key, this.onTap, this.isEnabled = true, this.isLoading = false});
+
+  final bool isEnabled;
+  final bool isLoading;
+  final VoidCallback? onTap;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: isLoading?null:isEnabled?onTap:null,
+        child: Ink(
+          width: double.infinity,
+          height: 56,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: BoxDecoration(color: isEnabled?AppColors.mainColor:AppColors.grayLight4, borderRadius: BorderRadius.circular(12)),
+          child: Center(
+            child: isLoading?CupertinoActivityIndicator(color: Colors.white,):Text(
+              text,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color:isEnabled? Colors.white:Color(0xffd9d9d9), fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton(this.text, {super.key, this.onTap, this.isEnabled = true, this.isLoading = false});

@@ -85,6 +85,7 @@ flutter:
     - assets/
     - assets/auth/
     - assets/client_home/
+    - assets/map/
 
 
 
