@@ -1,2 +1,2 @@
 
-enum AuthenticationStatus { connectionFailed, authenticated, unauthenticated }
+enum AuthenticationStatus { connectionFailed, authenticated, unauthenticated, disabledInternet }

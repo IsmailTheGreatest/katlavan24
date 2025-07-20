@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:katlavan24/core/constants/network_constants.dart';
 import 'package:katlavan24/core/enums/auth_status.dart';
 import 'package:katlavan24/core/models/token_model.dart';
@@ -35,14 +37,24 @@ class DioClient {
 
   Future<AuthenticationStatus> init() async {
     log('init started');
+    final result = await Connectivity().checkConnectivity();
+
+    if (result.contains(ConnectivityResult.none)) {
+      return AuthenticationStatus.disabledInternet;
+    } else {
+      final isConnected = await InternetConnectionChecker.instance.hasConnection;
+      if (!isConnected) {
+        return AuthenticationStatus.connectionFailed;
+      }
+    }
     Token? token = await TokenService().getItem();
     if (token == null) return AuthenticationStatus.unauthenticated;
 
     try {
       if (await _isAuthenticated(token)) return AuthenticationStatus.authenticated;
+      await TokenService().deleteItem();
       String? newAccessToken = await _getNewAccessToken(token.refreshToken);
       if (newAccessToken == null) {
-        await TokenService().deleteItem();
         return AuthenticationStatus.unauthenticated;
       }
 
@@ -62,29 +74,28 @@ class DioClient {
         await UserService().setItem(User.fromMap(response.data));
         return true;
       }
-    } catch (e,s) {
-      log(e.toString(),stackTrace: s);
+    } catch (e, s) {
+      log(e.toString(), stackTrace: s);
     }
     return false;
   }
 
   Future<String?> _getNewAccessToken(String refreshToken) async {
     _dio.options.headers.remove('Authorization');
-print('here acees');
-try{
-  final response = await _sendRequest('POST', NetworkConstants.refreshToken, data: {'refresh': refreshToken});
-  Token? token = await TokenService().getItem();
-  if(response.statusCode!>=200&&response.statusCode!<300){
-  final newAccessToken = response.data['access'];
-  await TokenService().setItem(token!.copyWith(accessToken: newAccessToken));
+    try {
+      final response = await _sendRequest('POST', NetworkConstants.refreshToken, data: {'refresh': refreshToken});
+      Token? token = await TokenService().getItem();
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        final newAccessToken = response.data['access'];
+        await TokenService().setItem(token!.copyWith(accessToken: newAccessToken));
 
-  return newAccessToken;}else {
-    return null ;
-  }
-}catch(e){
-  rethrow;
-}
-
+        return newAccessToken;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Function get getNewAccessToken => _getNewAccessToken;
@@ -198,9 +209,7 @@ class ApiInterceptors extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     if (response.statusCode == 401) {
-      print(response.realUri);
-      print('ahaah');
-      if(response.realUri.toString().contains('token/refresh/')){
+      if (response.realUri.toString().contains('token/refresh/')) {
         await TokenService().deleteItem();
         return;
       }
@@ -210,7 +219,6 @@ class ApiInterceptors extends Interceptor {
       if (newAccessToken == null) {
         await TokenService().deleteItem();
       }
-
     }
 
     super.onResponse(response, handler);

@@ -58,7 +58,12 @@ dependencies:
   permission_handler: ^12.0.0+1
   permission_handler_platform_interface: ^4.3.0
   rxdart: ^0.28.0
-
+  smooth_corner: ^1.1.1
+  flutter_switch: ^0.3.2
+  custom_sliding_segmented_control: ^1.8.5
+  stop_watch_timer: ^3.2.2
+  internet_connection_checker: ^3.0.1
+  connectivity_plus: ^6.1.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

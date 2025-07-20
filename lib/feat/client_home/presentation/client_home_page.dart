@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/constants/app_assets.dart';
-import 'package:katlavan24/core/localization/cubit/localization_cubit.dart';
 import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/core/utils/format_uzbek_time.dart';
 import 'package:katlavan24/core/utils/navigation.dart';
-import 'package:katlavan24/feat/map_test/map/map.dart';
+import 'package:katlavan24/feat/map_test/map/map_buy_materials.dart';
+import 'package:katlavan24/feat/map_test/map/map_rent_truck.dart';
 import 'package:katlavan24/gen_l10n/app_localizations.dart';
 
 class ClientHomePage extends StatelessWidget {
@@ -26,7 +25,7 @@ class ClientHomePage extends StatelessWidget {
               iconStr: AppAssetsPng.shoppingCart,
               imageStr: AppAssetsPng.bulk,
               onTap: () {
-                navigate(context, MapkitFlutterApp());
+                navigate(context, MapBuyMaterials());
               },
             ),
             SizedBox(height: 12),
@@ -35,7 +34,7 @@ class ClientHomePage extends StatelessWidget {
               iconStr: AppAssetsPng.search,
               imageStr: AppAssetsPng.truck,
               onTap: () {
-                context.read<LocalizationCubit>().changeLocale('uz', 'Latn');
+                navigate(context, MapRentTruck());
 
               },
             ),
@@ -146,18 +145,19 @@ borderRadius: BorderRadius.circular(12)
 }
 
 class OrderDetail extends StatelessWidget {
-  const OrderDetail({super.key, required this.vehicleNumber, required this.name, required this.timeLeft});
+  const OrderDetail({super.key, required this.vehicleNumber, required this.name, required this.timeLeft,this.color});
 
   final String vehicleNumber;
   final String name;
   final Duration timeLeft;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
       width: double.infinity,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color:color?? Colors.white, borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Image.asset(AppAssetsPng.truckBlue, height: 36),

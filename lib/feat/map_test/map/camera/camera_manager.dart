@@ -24,7 +24,9 @@ final class CameraManager {
         moveCameraToUserLocation();
       }
     },
-    onLocationStatusUpdate: (locationStatus) {},
+    onLocationStatusUpdate: (locationStatus) {
+
+    },
   );
 
   Location? _location;

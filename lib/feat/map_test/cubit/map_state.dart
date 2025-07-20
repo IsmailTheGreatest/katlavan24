@@ -1,9 +1,10 @@
 part of 'map_cubit.dart';
 
 class MapState extends Equatable {
-  const MapState( {
+  const MapState({
+    this.tapIgnore = false,
     this.selectedUnit = Units.m3,
-    this.selectedTruck=Truck.small,
+    this.selectedTruck = Truck.small,
     this.selectedMaterial,
     this.hideBottom = false,
     this.selectedAddress,
@@ -18,6 +19,7 @@ class MapState extends Equatable {
   final Stage stage;
   final Materials? selectedMaterial;
   final Units selectedUnit;
+  final bool tapIgnore;
 
   MapState copyWith({
     String? selectedAddress,
@@ -27,9 +29,11 @@ class MapState extends Equatable {
     Status? selectedAddressStatus,
     bool? hideBottom,
     Stage? stage,
+    bool? tapIgnore,
   }) =>
       MapState(
-        selectedTruck: selectedTruck??this.selectedTruck,
+          tapIgnore: tapIgnore ?? this.tapIgnore,
+          selectedTruck: selectedTruck ?? this.selectedTruck,
           selectedMaterial: selectedMaterial ?? this.selectedMaterial,
           selectedUnit: selectedUnit ?? this.selectedUnit,
           stage: stage ?? this.stage,
@@ -38,12 +42,20 @@ class MapState extends Equatable {
           selectedAddressStatus: selectedAddressStatus ?? this.selectedAddressStatus);
 
   @override
-  List<Object?> get props =>
-      [selectedAddress, hideBottom, selectedAddressStatus, stage, selectedMaterial, selectedUnit,selectedTruck];
+  List<Object?> get props => [
+        selectedAddress,
+        hideBottom,
+        selectedAddressStatus,
+        stage,
+        selectedMaterial,
+        selectedUnit,
+        selectedTruck,
+        tapIgnore
+      ];
 }
 
 //todo:move to different file
-enum Stage { initial, selectedLocation, third }
+enum Stage { initial, selectedLocation, third, fourth, fifth }
 
 extension StageX on Stage {
   bool get isInitial => this == Stage.initial;
@@ -51,44 +63,38 @@ extension StageX on Stage {
   bool get isSelectedLocation => this == Stage.selectedLocation;
 
   bool get isThird => this == Stage.third;
-}
 
-enum Materials { qum, sement, shagal, ohak, gisht }
+  bool get isFourth => this == Stage.fourth;
 
-extension MaterialX on Materials {
-  String get toPretty {
-    switch (this) {
-      case Materials.gisht:
-        return "G'isht";
-      case Materials.qum:
-        return "Qum";
-      case Materials.sement:
-        return "Sement";
-      case Materials.shagal:
-        return "Shag'al";
-      case Materials.ohak:
-        return "Ohak";
-    }
+  bool get isFifth => this == Stage.fifth;
+
+  bool operator >(Stage other) {
+    final curIndex = Stage.values.indexOf(this);
+    final otherIndex = Stage.values.indexOf(other);
+    return curIndex > otherIndex;
+  }
+
+  bool operator <(Stage other) {
+    final curIndex = Stage.values.indexOf(this);
+    final otherIndex = Stage.values.indexOf(other);
+    return curIndex < otherIndex;
+  }
+
+  bool operator <=(Stage other) {
+    final curIndex = Stage.values.indexOf(this);
+    final otherIndex = Stage.values.indexOf(other);
+    return curIndex <= otherIndex;
+  }
+
+  bool operator >=(Stage other) {
+    final curIndex = Stage.values.indexOf(this);
+    final otherIndex = Stage.values.indexOf(other);
+    return curIndex >= otherIndex;
   }
 }
 
-enum Units { m3, m2, kg, dona }
 
-extension UnitsX on Units {
-  String get toPretty {
-    switch (this) {
-      case Units.m3:
-        return 'm\u00B3';
-      case Units.m2:
-        return 'm\u00B2';
 
-      case Units.kg:
-        return 'kg';
-      case Units.dona:
-        return 'dona';
-    }
-  }
-}
 
 enum Truck {
   small('Small Truck', 'Havo-65801', 'assets/map/small_truck.png'),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:katlavan24/core/enums/auth_status.dart';
 import 'package:katlavan24/core/network/dio_client.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
+import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/feat/auth/presentation/intro_page.dart';
 import 'package:katlavan24/feat/client_home/presentation/client_home_page.dart';
 
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => status == AuthenticationStatus.unauthenticated ? IntroPage() : IntroPage(),
+          builder: (context) => status == AuthenticationStatus.unauthenticated ? IntroPage() : NoInternetPage(message: 'Connect to Internet'),
         ),
         (route) => false,
       );
@@ -69,4 +70,20 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<AuthenticationStatus> checkUser() async => DioClient().init();
+}
+class NoInternetPage extends StatelessWidget {
+  const NoInternetPage({super.key, required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(backgroundColor:AppColors.mainColor,body: Center(child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.wifi_off_rounded,size: 100,color: Colors.white,),
+        SizedBox(height: 30,),
+        Text(message,style: AppStyles.s32w600.copyWith(color: Colors.white),),
+      ],
+    ),),);
+  }
 }
