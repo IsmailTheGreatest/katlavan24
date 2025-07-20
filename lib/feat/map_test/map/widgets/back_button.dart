@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/feat/map_test/cubit/map_cubit.dart';
 import 'package:katlavan24/feat/map_test/cubit/map_rent_cubit.dart';
 class KatlavanBackButton extends StatelessWidget {
@@ -19,7 +20,7 @@ class KatlavanBackButton extends StatelessWidget {
 
 class KatlavanRentBackButton extends StatelessWidget {
   const KatlavanRentBackButton({super.key, required this.stage});
-  final StageRent stage;
+  final Stage stage;
 
   @override
   Widget build(BuildContext context) {

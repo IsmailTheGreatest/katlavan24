@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
 import 'package:katlavan24/core/styles/styles.dart';
+import 'package:katlavan24/core/utils/navigation.dart';
 import 'package:katlavan24/core/widgets/buttons.dart';
 import 'package:katlavan24/feat/map_test/cubit/map_rent_cubit.dart';
 import 'package:katlavan24/feat/map_test/map/rentWidgets/custom_top_app_bar.dart';
 import 'package:katlavan24/feat/map_test/map/rentWidgets/rent_truck_choice_chip.dart';
 import 'package:katlavan24/feat/map_test/map/rentWidgets/wrapper_column.dart';
+
 
 class TruckSelectionOverlay extends StatelessWidget {
   final MapRentState state;
@@ -26,6 +28,9 @@ class TruckSelectionOverlay extends StatelessWidget {
               selectedDropOff: state.selectedDropOff,
               selectedPickup: state.selectedPickUp,
               nextWidget: TruckContainerRentTruck(
+                onDetailTap: (){
+                  navigate(context,TruckDetails(state: state,truckRent: state.trucks.first,));
+                  },
                 onRemove: () {},
                 count: 0,
                 truck: state.trucks.first,
@@ -41,6 +46,9 @@ class TruckSelectionOverlay extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return TruckContainerRentTruck(
+                  onDetailTap: (){
+                    navigate(context,TruckDetails(state: state,truckRent: state.trucks[index+1],));
+                  },
                     onRemove: () {
                       context.read<MapRentCubit>().removeTruck(index + 1);
                     },
@@ -177,6 +185,7 @@ class TruckContainerRentTruck extends StatelessWidget {
   final bool isFirst;
   final int count;
   final VoidCallback onRemove;
+  final VoidCallback onDetailTap;
 
   const TruckContainerRentTruck(
       {super.key,
@@ -184,7 +193,7 @@ class TruckContainerRentTruck extends StatelessWidget {
       required this.onChanged,
       this.isFirst = false,
       required this.count,
-      required this.onRemove});
+      required this.onRemove, required this.onDetailTap});
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +247,7 @@ class TruckContainerRentTruck extends StatelessWidget {
               child: SecondaryButton(
                 'Details',
                 localImagePath: 'assets/map/info.png',
-                onTap: () {},
+                onTap: onDetailTap,
                 iconSize: 24,
                 fontSize: 14,
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -284,6 +293,49 @@ class TruckContainerRentTruck extends StatelessWidget {
     ]);
   }
 }
+
+class TruckDetails extends StatelessWidget {
+  const TruckDetails({super.key, required this.state, required this.truckRent});
+  final MapRentState state;
+  final TruckRent truckRent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          CustomTopAppBar(state.stage,customLabel: 'Truck Details', nextWidget: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 14,),
+                Text(truckRent.modelName,style: AppStyles.s16w700.copyWith(height: 21/16),),
+                SizedBox(height: 4,),
+                Text('Capacity:${truckRent.capacity}',style: AppStyles.s14w500.copyWith(color: AppColors.grayColor),),
+                SizedBox(height: 24,),
+                Image.asset(truckRent.urlImage),
+                SizedBox(height: 24),
+                Text('Capacity size',style: AppStyles.s16w700.copyWith(height: 21/16),),
+                SizedBox(height: 6,),
+                ...truckRent.size.values.map((e){
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text('${e.$1} = ${e.$2}m',style: AppStyles.s14w500.copyWith(color: AppColors.grayColor,height: 18/14),),
+                  );
+                }),
+
+
+              ],
+
+            ),
+          ), selectedDropOff: state.selectedDropOff, selectedPickup:state.selectedPickUp)
+        ],
+      ),
+    );
+  }
+}
+
 
 extension on String {
   String get capitalizeFirst {

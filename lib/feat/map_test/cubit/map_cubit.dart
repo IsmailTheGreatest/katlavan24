@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/enums/materials.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/enums/status_enum.dart';
 import 'package:katlavan24/core/enums/units.dart';
 

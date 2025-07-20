@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/enums/materials.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
 import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/core/utils/extension_utils/num_extension.dart';
@@ -106,6 +107,7 @@ class _IntroBottomSheetState extends State<IntroBottomSheet> {
                                       Stage.third => 'Select Trucks Tariff',
                                       Stage.fourth => 'Searching materials and truck',
                                       Stage.fifth => 'Found a factory',
+                                      _=>''
                                     },
                                     style: AppStyles.s24w700.copyWith(fontSize: 20, height: 26 / 20),
                                   ),
@@ -273,38 +275,41 @@ class _IntroBottomSheetState extends State<IntroBottomSheet> {
                                           )
                                         ],
                                       ),
-                                      AnimatedContainer(
+                                      AnimatedSize(
                                         curve: Curves.easeInOutCubic,
                                         duration: Duration(milliseconds: 600),
-                                        height: state.stage.isThird ? null : 0,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(top: 24),
-                                          child: SizedBox(
-                                            height: (MediaQuery.of(context).size.width - 32) / Truck.values.length,
-                                            child: Stack(
-                                              children: [
-                                                AnimatedPositioned(
-                                                    bottom: 0,
-                                                    top: 0,
-                                                    curve: Curves.easeIn,
-                                                    left: ((MediaQuery.of(context).size.width - 32) /
-                                                            Truck.values.length) *
-                                                        state.selectedTruck.index,
-                                                    duration: Duration(milliseconds: 300),
-                                                    child: Container(
-                                                      decoration: ShapeDecoration(
-                                                          color: AppColors.grayLight4,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(16),
-                                                          )),
-                                                      width: (MediaQuery.of(context).size.width - 32) /
-                                                          Truck.values.length,
-                                                    )),
-                                                Row(
-                                                    children: Truck.values
-                                                        .map((e) => Expanded(child: TruckCont(truck: e)))
-                                                        .toList()),
-                                              ],
+
+                                        child: ConstrainedBox(
+                                          constraints:  state.stage.isThird ? BoxConstraints() : BoxConstraints(maxHeight: 0),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 24),
+                                            child: SizedBox(
+                                              height: (MediaQuery.of(context).size.width - 32) / Truck.values.length,
+                                              child: Stack(
+                                                children: [
+                                                  AnimatedPositioned(
+                                                      bottom: 0,
+                                                      top: 0,
+                                                      curve: Curves.easeIn,
+                                                      left: ((MediaQuery.of(context).size.width - 32) /
+                                                              Truck.values.length) *
+                                                          state.selectedTruck.index,
+                                                      duration: Duration(milliseconds: 300),
+                                                      child: Container(
+                                                        decoration: ShapeDecoration(
+                                                            color: AppColors.grayLight4,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(16),
+                                                            )),
+                                                        width: (MediaQuery.of(context).size.width - 32) /
+                                                            Truck.values.length,
+                                                      )),
+                                                  Row(
+                                                      children: Truck.values
+                                                          .map((e) => Expanded(child: TruckCont(truck: e)))
+                                                          .toList()),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),

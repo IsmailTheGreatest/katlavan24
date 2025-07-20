@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
 import 'package:katlavan24/core/utils/extension_utils/bounding_box.dart';
 import 'package:katlavan24/core/utils/extension_utils/is_null.dart';
@@ -184,16 +185,16 @@ class _MapRentTruckState extends State<MapRentTruck> {
                             ).checkCond(!state.stage.isFourth),
                           ),
                           IgnorePointer(
-                            ignoring: !(state.stage > StageRent.initial || state.tapIgnore),
+                            ignoring: !(state.stage > Stage.initial || state.tapIgnore),
                             child: Container(
                               color: Colors.black45,
                             ),
-                          ).checkCondAnimatedOpacity(state.stage > StageRent.initial),
+                          ).checkCondAnimatedOpacity(state.stage > Stage.initial),
                           MaterialAndSupplierWidget(state: state).checkCondAnimatedSlideThree(
-                              state.stage.index, StageRent.selectedLocation.index,
+                              state.stage.index, Stage.selectedLocation.index,
                               customExitOffset: Offset(-1.5, 0)),
                           TruckSelectionOverlay(state: state).checkCondAnimatedSlideThree(
-                              state.stage.index, StageRent.third.index,
+                              state.stage.index, Stage.third.index,
                               customOffset: Offset(1.5, 0), customExitOffset: Offset(-1.5, 0)),
                           SafeArea(
                             bottom: false,
@@ -210,13 +211,13 @@ class _MapRentTruckState extends State<MapRentTruck> {
                               ),
                             ),
                           ).checkCondAnimatedPositionedLeft(
-                              state.stage <= StageRent.third, MediaQuery.of(context).size.width),
+                              state.stage <= Stage.third, MediaQuery.of(context).size.width),
                           SafeArea(
                             bottom: false,
                             child:SearchTrucks(state: state)
                             ,
                           ).checkCondAnimatedPositionedBottom(
-                              state.stage > StageRent.third, MediaQuery.of(context).size.height/2),
+                              state.stage > Stage.third, MediaQuery.of(context).size.height/2),
                         ],
                       ),
                     ),

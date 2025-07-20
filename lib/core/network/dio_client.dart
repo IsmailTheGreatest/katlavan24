@@ -52,9 +52,9 @@ class DioClient {
 
     try {
       if (await _isAuthenticated(token)) return AuthenticationStatus.authenticated;
-      await TokenService().deleteItem();
       String? newAccessToken = await _getNewAccessToken(token.refreshToken);
       if (newAccessToken == null) {
+        await TokenService().deleteItem();
         return AuthenticationStatus.unauthenticated;
       }
 

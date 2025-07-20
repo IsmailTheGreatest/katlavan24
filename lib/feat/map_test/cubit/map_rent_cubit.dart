@@ -2,10 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:katlavan24/core/enums/materials.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/enums/status_enum.dart';
 import 'package:katlavan24/core/enums/units.dart';
 import 'package:katlavan24/core/utils/extension_utils/is_null.dart';
-import 'package:yandex_maps_mapkit/mapkit.dart';
+import 'package:yandex_maps_mapkit/mapkit.dart' hide Map;
 
 part 'map_rent_state.dart';
 
@@ -29,7 +30,7 @@ class MapRentCubit extends Cubit<MapRentState> {
   }
 
   void lowerStage() {
-    emitG(state.copyWith(stage: StageRent.values[state.stage.index - 1]));
+    emitG(state.copyWith(stage: Stage.values[state.stage.index - 1]));
   }
 
   void enableIgnore() {
@@ -61,22 +62,22 @@ class MapRentCubit extends Cubit<MapRentState> {
   }
 
   void goFourth() {
-    emitG(state.copyWith(stage: StageRent.fourth));
+    emitG(state.copyWith(stage: Stage.fourth));
   }
 
   bool shouldButtonBeEnabled() {
     switch (state.stage) {
-      case StageRent.initial:
+      case Stage.initial:
         return state.selectedPickUp.isNotNull && state.selectedDropOff.isNotNull;
-      case StageRent.selectedLocation:
+      case Stage.selectedLocation:
         return state.selectedMaterial.isNotNull && volumeController.text.trim().isNotEmpty;
-      case StageRent.third:
+      case Stage.third:
         return state.trucks.isNotEmpty && state.selectedPayment.isNotNull;
-      case StageRent.fourth:
+      case Stage.fourth:
         return false;
-      case StageRent.fifth:
+      case Stage.fifth:
         return false;
-      case StageRent.sixth:
+      case Stage.sixth:
         return false;
     }
   }
@@ -87,11 +88,11 @@ class MapRentCubit extends Cubit<MapRentState> {
   }
 
   void goToTheInitial() {
-    emitG(state.copyWith(stage: StageRent.initial));
+    emitG(state.copyWith(stage: Stage.initial));
   }
 
   void goToTheSelectedLocation() {
-    emitG(state.copyWith(stage: StageRent.selectedLocation));
+    emitG(state.copyWith(stage: Stage.selectedLocation));
   }
 
   void selectMaterial(Materials material) {
@@ -107,14 +108,14 @@ class MapRentCubit extends Cubit<MapRentState> {
   }
 
   void increaseStage() {
-    emitG(state.copyWith(stage: StageRent.values[state.stage.index + 1]));
+    emitG(state.copyWith(stage: Stage.values[state.stage.index + 1]));
 
-    if (StageRent.values[state.stage.index].isFourth) {
+    if (Stage.values[state.stage.index].isFourth) {
       Future.delayed(Duration(seconds: 5), () {
         increaseStage();
       });
     }
-    if (StageRent.values[state.stage.index].isFifth) {
+    if (Stage.values[state.stage.index].isFifth) {
       Future.delayed(Duration(seconds: 10), () {
         increaseStage();
       });

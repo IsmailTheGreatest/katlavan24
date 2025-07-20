@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart' hide Animation;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
 import 'package:katlavan24/core/styles/styles.dart';
 import 'package:katlavan24/core/utils/extension_utils/bounding_box.dart';
@@ -47,7 +48,7 @@ class _RentTruckBottomSheetState extends State<RentTruckBottomSheet> {
     return BlocBuilder<MapRentCubit, MapRentState>(builder: (context, state) {
       return Column(
         children: [
-          Align(alignment: Alignment.topRight, child: widget.button).checkCond(state.stage == StageRent.initial),
+          Align(alignment: Alignment.topRight, child: widget.button).checkCond(state.stage == Stage.initial),
           AnimatedSize(
             alignment: Alignment.topCenter,
             curve: Curves.easeInOut,
@@ -185,11 +186,11 @@ class _RentTruckBottomSheetState extends State<RentTruckBottomSheet> {
                               flex: 8,
                               child: PrimaryButton(
                                   switch ((state.stage)) {
-                                    StageRent.initial => 'Enter more details',
-                                    StageRent.selectedLocation => 'Next',
-                                    StageRent.third => 'Confirm',
-                                    StageRent.fourth => ' throw UnimplementedError()',
-                                    StageRent.fifth => 'throw UnimplementedError()',
+                                    Stage.initial => 'Enter more details',
+                                    Stage.selectedLocation => 'Next',
+                                    Stage.third => 'Confirm',
+                                    Stage.fourth => ' throw UnimplementedError()',
+                                    Stage.fifth => 'throw UnimplementedError()',
                                     _ => '',
                                   },
                                   isEnabled: state.buttonEnabled.isEnabled, onTap: () {
@@ -292,7 +293,7 @@ class _SearchTrucksState extends State<SearchTrucks> {
                           style: AppStyles.s15w600.copyWith(height: 20 / 15),
                         );
                       }),
-                ).checkCondAnimatedOpacity(widget.state.stage<StageRent.sixth)
+                ).checkCondAnimatedOpacity(widget.state.stage<Stage.sixth)
               ],
             ),
             Divider(
@@ -344,7 +345,7 @@ class _SearchTrucksState extends State<SearchTrucks> {
                 ),
                 duration: Duration(milliseconds: 500),
                 crossFadeState:
-                    widget.state.stage > StageRent.fifth ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    widget.state.stage > Stage.fifth ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               ),
             ),
           ],
@@ -361,7 +362,7 @@ class OverlayAppBarRentTruck extends StatelessWidget {
     required this.numOfTrucks,
   });
 
-  final StageRent stage;
+  final Stage stage;
   final int numOfTrucks;
 
   @override
@@ -381,10 +382,10 @@ class OverlayAppBarRentTruck extends StatelessWidget {
             children: [
               Text(
                 switch (stage) {
-                  StageRent.initial => 'Truck',
-                  StageRent.fourth => 'Searching trucks',
-                  StageRent.fifth => '3 trucks near you',
-                  StageRent.sixth => '3 trucks near you',
+                  Stage.initial => 'Truck',
+                  Stage.fourth => 'Searching trucks',
+                  Stage.fifth => '3 trucks near you',
+                  Stage.sixth => '3 trucks near you',
                   _ => 'throw UnimplementedError()',
                 },
                 style: AppStyles.s24w700.copyWith(fontSize: 20, height: 26 / 20),
@@ -392,7 +393,7 @@ class OverlayAppBarRentTruck extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 4),
                 child: Text('Looking for $numOfTrucks trucks'),
-              ).checkCond(stage>=StageRent.fifth)
+              ).checkCond(stage>=Stage.fifth)
             ],
           ),
         ],

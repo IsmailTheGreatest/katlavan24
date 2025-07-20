@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:katlavan24/core/enums/stage.dart';
 import 'package:katlavan24/core/styles/app_colors.dart';
 import 'package:katlavan24/core/styles/styles.dart';
+import 'package:katlavan24/core/utils/extension_utils/is_null.dart';
+import 'package:katlavan24/core/utils/extension_utils/widget_extension.dart';
 import 'package:katlavan24/feat/map_test/cubit/map_rent_cubit.dart';
 import 'package:yandex_maps_mapkit/mapkit.dart';
 
 class CustomTopAppBar extends StatelessWidget {
-  final StageRent stage;
+  final Stage stage;
   final GeoObject? selectedDropOff;
   final GeoObject? selectedPickup;
   final Widget nextWidget;
+  final String? customLabel;
 
   const CustomTopAppBar(this.stage,
-      {super.key, required this.nextWidget, required this.selectedDropOff, required this.selectedPickup});
+      {super.key, required this.nextWidget, required this.selectedDropOff, required this.selectedPickup, this.customLabel});
 
   @override
   Widget build(BuildContext context) {
@@ -30,44 +34,48 @@ class CustomTopAppBar extends StatelessWidget {
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16))),
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.grayLight3,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  stage.index.toString(),
-                  style: AppStyles.s20w700.copyWith(color: AppColors.black),
-                ),
-              ),
-              SizedBox(
-                width: 12,
-              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.grayLight3,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      stage.index.toString(),
+                      style: AppStyles.s20w700.copyWith(color: AppColors.black),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                ],
+              ).checkCond(customLabel.isNull),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        switch (stage) {
-                          StageRent.initial => '',
-                          StageRent.selectedLocation => 'Material & Supplier',
-                          StageRent.third => 'Truck',
-                          StageRent.fourth => 'throw UnimplementedError()',
-                          StageRent.fifth => 'throw UnimplementedError()',
+                       customLabel?? switch (stage) {
+                          Stage.initial => '',
+                          Stage.selectedLocation => 'Material & Supplier',
+                          Stage.third => 'Truck',
+                          Stage.fourth => 'throw UnimplementedError()',
+                          Stage.fifth => 'throw UnimplementedError()',
                           _ => '',
                         },
                         style: AppStyles.s20w700.copyWith(height: 26 / 20, color: AppColors.black)),
                     SizedBox(
                       height: 2,
                     ),
-                    Text(
-                        switch (stage) {
-                          StageRent.initial => '',
-                          StageRent.selectedLocation => 'Enter details of materials & supplier',
-                          StageRent.third => '${selectedPickup?.name} \u2192 ${selectedPickup?.name}',
-                          StageRent.fourth => 'hrow UnimplementedError()',
-                          StageRent.fifth => 'throw UnimplementedError()',
+                    customLabel.isNotNull?SizedBox():Text(
+                       switch (stage) {
+                          Stage.initial => '',
+                          Stage.selectedLocation => 'Enter details of materials & supplier',
+                          Stage.third => '${selectedPickup?.name} \u2192 ${selectedPickup?.name}',
+                          Stage.fourth => 'hrow UnimplementedError()',
+                          Stage.fifth => 'throw UnimplementedError()',
                           _ => ''
                         },
                         style: AppStyles.s14.copyWith(fontWeight: FontWeight.w500, color: AppColors.grayColor)),
@@ -77,7 +85,7 @@ class CustomTopAppBar extends StatelessWidget {
               IconButton(
                   visualDensity: VisualDensity.compact,
                   onPressed: () {
-                    context.read<MapRentCubit>().lowerStage();
+                  customLabel.isNull?  context.read<MapRentCubit>().lowerStage():Navigator.pop(context);
                   },
                   icon: Container(
                       padding: EdgeInsets.all(7),
